@@ -22,4 +22,20 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(UserException.NullUserException::new);
         return userMapper.toDto(user);
     }
+
+    @Override
+    public Boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    @Override
+    public UserModel createUser(UserModel userModel) {
+        return userRepository.save(userModel);
+    }
+
+    @Override
+    public UserModel findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(UserException.NullUserException::new);
+    }
 }

@@ -1,16 +1,17 @@
 package com.flowdocs.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @MappedSuperclass
 @Data
 @EqualsAndHashCode
 @Getter
 @Setter
+@SuperBuilder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public abstract class BaseModel {
 
     @Id

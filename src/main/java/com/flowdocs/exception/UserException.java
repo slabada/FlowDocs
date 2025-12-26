@@ -4,7 +4,7 @@ public class UserException {
 
     public static class NullUserException extends RuntimeException {
         public NullUserException() {
-            super("Льгота не найден");
+            super("Пользователь не найден");
         }
     }
 }
