@@ -1,11 +1,14 @@
 package com.flowdocs.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @MappedSuperclass
-@Data
 @EqualsAndHashCode
 @Getter
 @Setter
@@ -16,5 +19,5 @@ public abstract class BaseModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
+    private Long id;
 }

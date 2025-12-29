@@ -1,5 +1,6 @@
 package com.flowdocs.service;
 
+import com.flowdocs.domain.UserDomain;
 import com.flowdocs.exception.AuthenticationException;
 import com.flowdocs.model.LoginModel;
 import com.flowdocs.model.RegistrationModel;
@@ -31,13 +32,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .password(hashPassword)
                 .role(reg.role())
                 .build();
-        UserModel user = userService.createUser(userModel);
+        UserDomain user = userService.createUser(userModel);
         return jwtUtil.generateToken(user.getId());
     }
 
     @Override
     public String login(LoginModel login) {
-        UserModel user = userService.findByEmail(login.email());
+        UserDomain user = userService.findByEmail(login.email())
+                .orElseThrow(AuthenticationException.ConflictAuthException::new);
         if (!user.getEmail().equals(login.email())) {
             throw new AuthenticationException.ConflictAuthException();
         }

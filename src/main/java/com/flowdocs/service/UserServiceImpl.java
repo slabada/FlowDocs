@@ -1,12 +1,14 @@
 package com.flowdocs.service;
 
-import com.flowDocs.model.UserDto;
+import com.flowdocs.domain.UserDomain;
 import com.flowdocs.exception.UserException;
-import com.flowdocs.model.UserModel;
 import com.flowdocs.mapper.UserMapper;
+import com.flowdocs.model.UserModel;
 import com.flowdocs.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,10 +19,10 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     @Override
-    public UserDto getUser(Long id) {
+    public UserDomain getUser(Long id) {
         UserModel user = userRepository.findById(id)
                 .orElseThrow(UserException.NullUserException::new);
-        return userMapper.toDto(user);
+        return userMapper.toDomain(user);
     }
 
     @Override
@@ -29,13 +31,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserModel createUser(UserModel userModel) {
-        return userRepository.save(userModel);
+    public UserDomain createUser(UserModel userModel) {
+        var model = userRepository.save(userModel);
+        return userMapper.toDomain(model);
     }
 
     @Override
-    public UserModel findByEmail(String email) {
+    public Optional<UserDomain> findByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(UserException.NullUserException::new);
+                .map(userMapper::toDomain);
     }
 }

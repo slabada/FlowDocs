@@ -1,15 +1,17 @@
 package com.flowdocs.service;
 
-import com.flowDocs.model.UserDto;
+import com.flowdocs.domain.UserDomain;
 import com.flowdocs.model.UserModel;
+
+import java.util.Optional;
 
 public interface UserService {
 
-    UserDto getUser(Long id);
+    UserDomain getUser(Long id);
 
     Boolean existsByEmail(String email);
 
-    UserModel createUser(UserModel userDto);
+    UserDomain createUser(UserModel userDto);
 
-    UserModel findByEmail(String email);
+    Optional<UserDomain> findByEmail(String email);
 }

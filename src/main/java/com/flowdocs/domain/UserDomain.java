@@ -1,23 +1,17 @@
-package com.flowdocs.model;
+package com.flowdocs.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-@Entity
-@EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
-@Table(name = "Users")
-@SuperBuilder(toBuilder = true)
-@NoArgsConstructor
 @AllArgsConstructor
-public class UserModel extends BaseModel {
+@NoArgsConstructor
+@SuperBuilder(toBuilder = true)
+public class UserDomain extends BaseDomain {
 
     private String firstName;
 

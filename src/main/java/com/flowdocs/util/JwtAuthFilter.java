@@ -1,23 +1,21 @@
 package com.flowdocs.util;
 
-import com.flowDocs.model.UserDto;
+import com.flowdocs.domain.UserDomain;
+import com.flowdocs.model.UserProxy;
 import com.flowdocs.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Collections;
 
 @Component
 @RequiredArgsConstructor
@@ -42,8 +40,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
         if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDto user = userService.getUser(userId);
-            UserDetails userDetails = new User(user.getFirstName(), StringUtils.EMPTY, Collections.emptyList());
+            UserDomain user = userService.getUser(userId);
+            UserDetails userDetails = new UserProxy(user);
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails,
                             null,

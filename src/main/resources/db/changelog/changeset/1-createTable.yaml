@@ -42,3 +42,174 @@ databaseChangeLog:
                   constraints:
                     unique: false
                     nullable: true
+
+  - changeSet:
+      id: 002-crate-table-document
+      author: slabada
+      changes:
+        - createTable:
+            tableName: document
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(150)
+                  constraints:
+                    unique: false
+                    nullable: true
+              - column:
+                  name: description
+                  type: varchar(255)
+                  constraints:
+                    unique: false
+                    nullable: true
+              - column:
+                  name: date_start
+                  type: datetime
+                  constraints:
+                    unique: false
+                    nullable: true
+              - column:
+                  name: date_end
+                  type: datetime
+                  constraints:
+                    unique: false
+                    nullable: true
+
+  - changeSet:
+      id: 003-crate-table-document_author
+      author: slabada
+      changes:
+        - createTable:
+            tableName: document_authors
+            columns:
+              - column:
+                  name: document_id
+                  type: bigint
+                  constraints:
+                    primaryKey: false
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    primaryKey: false
+                    nullable: false
+
+        - addPrimaryKey:
+            tableName: document_authors
+            columnNames: document_id, user_id
+            constraintName: pk_document_authors
+
+        - addForeignKeyConstraint:
+            baseTableName: document_authors
+            baseColumnNames: document_id
+            referencedTableName: document
+            referencedColumnNames: id
+            constraintName: fk_document_authors_document
+
+        - addForeignKeyConstraint:
+            baseTableName: document_authors
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_document_authors_user
+
+  - changeSet:
+      id: 004-crate-table-document_experts
+      author: slabada
+      changes:
+        - createTable:
+            tableName: document_experts
+            columns:
+              - column:
+                  name: document_id
+                  type: bigint
+                  constraints:
+                    primaryKey: false
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    primaryKey: false
+                    nullable: false
+
+        - addPrimaryKey:
+            tableName: document_experts
+            columnNames: document_id, user_id
+            constraintName: pk_document_experts
+
+        - addForeignKeyConstraint:
+            baseTableName: document_experts
+            baseColumnNames: document_id
+            referencedTableName: document
+            referencedColumnNames: id
+            constraintName: fk_document_experts_document
+
+        - addForeignKeyConstraint:
+            baseTableName: document_experts
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_document_experts_user
+
+  - changeSet:
+      id: 005-crate-table-approval
+      author: slabada
+      changes:
+        - createTable:
+            tableName: approval
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: document_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: expert_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: decision
+                  type: VARCHAR(20)
+                  defaultValue: PENDING
+                  constraints:
+                    nullable: false
+              - column:
+                  name: decided_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: true
+
+        - addForeignKeyConstraint:
+            baseTableName: approval
+            baseColumnNames: expert_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_approval_expert
+
+        - addForeignKeyConstraint:
+            baseTableName: approval
+            baseColumnNames: document_id
+            referencedTableName: document
+            referencedColumnNames: id
+            constraintName: fk_document_expert
+
+        - addUniqueConstraint:
+            tableName: approval
+            columnNames: expert_id, document_id
+            constraintName: uq_approval_expert

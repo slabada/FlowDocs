@@ -1,5 +1,6 @@
 package com.flowdocs.service;
 
+import com.flowdocs.domain.UserDomain;
 import com.flowdocs.model.LoginModel;
 import com.flowdocs.model.RegistrationModel;
 import com.flowdocs.model.UserModel;
@@ -10,6 +11,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -37,7 +40,7 @@ class AuthenticationServiceImplTest {
                 "testPassword",
                 "role"
         );
-        var user = new UserModel().toBuilder()
+        var user = new UserDomain().toBuilder()
                 .id(1L)
                 .firstName(reg.firstName())
                 .lastName(reg.lastName())
@@ -63,13 +66,13 @@ class AuthenticationServiceImplTest {
     @Test
     void login() {
         var login = new LoginModel("testEmail", "hashPassword");
-        var user = new UserModel().toBuilder()
+        var user = new UserDomain().toBuilder()
                 .id(1L)
                 .email(login.email())
                 .password(login.password())
                 .build();
 
-        when(userService.findByEmail(login.email())).thenReturn(user);
+        when(userService.findByEmail(login.email())).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(login.password(), user.getPassword())).thenReturn(true);
         when(jwtUtil.generateToken(user.getId())).thenReturn("token");
 
